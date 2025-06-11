@@ -1,0 +1,11 @@
+bs4
+tmdbv3api
+dateparser
+python-dotenv
+fastapi
+uvicorn
+tzdata
+lxml
+slowapi
+curl_cffi
+fake-headers
