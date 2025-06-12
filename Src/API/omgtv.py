@@ -40,11 +40,18 @@ STATIC_LOGOS_247ITA = {
     "cielo": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/italy/cielo-it.png",
     "sky sport uno": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/italy/sky-sport-uno-it.png",
     "sky sport calcio": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/italy/sky-sport-calcio-it.png",
-    "sky sport f1": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/italy/sky-sport-f1-it.png",
+    "sky sport f1": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/italy/sky-sport-f1-it.png", # Keep existing
     "sky sport motogp": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/italy/sky-sport-motogp-it.png",
     "eurosport 1": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/italy/eurosport-1-it.png",
     "eurosport 2": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/italy/eurosport-2-it.png",
-    "dazn 1": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/DAZN_1_Logo.svg/774px-DAZN_1_Logo.svg.png"
+    "dazn 1": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/DAZN_1_Logo.svg/774px-DAZN_1_Logo.svg.png",
+    "sky sport 251": "https://logodownload.org/wp-content/uploads/2020/06/sky-sports-logo-0-1.png",
+    "sky sport 252": "https://logodownload.org/wp-content/uploads/2020/06/sky-sports-logo-0-1.png",
+    "sky sport 253": "https://logodownload.org/wp-content/uploads/2020/06/sky-sports-logo-0-1.png",
+    "sky sport 254": "https://logodownload.org/wp-content/uploads/2020/06/sky-sports-logo-0-1.png",
+    "sky sport 255": "https://logodownload.org/wp-content/uploads/2020/06/sky-sports-logo-0-1.png",
+    "sky sport 256": "https://logodownload.org/wp-content/uploads/2020/06/sky-sports-logo-0-1.png",
+    "sky sport 257": "https://logodownload.org/wp-content/uploads/2020/06/sky-sports-logo-0-1.png",
     # ... altri loghi
 }
 
@@ -68,6 +75,17 @@ def get_247ita_channel_numeric_id(channel_name_query, html_content):
             stream_number = href.split('-')[-1].replace('.php', '')
             return stream_number
     return None
+
+DADDYLIVE_CHANNEL_NAME_MAP = {
+    "sky calcio 1": "Sky Sport 251",
+    "sky calcio 2": "Sky Sport 252",
+    "sky calcio 3": "Sky Sport 253",
+    "sky calcio 4": "Sky Sport 254",
+    "sky calcio 5": "Sky Sport 255",
+    "sky calcio 6": "Sky Sport 256",
+    "sky calcio 7": "Sky Sport 257",
+    # Aggiungere altre varianti se DaddyLive usa nomi come "sky sport calcio 1", ecc.
+}
 
 async def fetch_247ita_channel_list_html(client):
     """Scarica l'HTML della lista dei canali 247ita."""
@@ -97,26 +115,43 @@ async def get_247ita_streams(client, mfp_url=None, mfp_password=None):
 
     for link in links:
         if "Italy".lower() in link.text.lower(): # Filtra per canali italiani
-            channel_name_original = link.text.strip()
-            channel_name_clean = channel_name_original.replace("Italy", "").replace("8", "").replace("(251)", "").replace("(252)", "").replace("(253)", "").replace("(254)", "").replace("(255)", "").replace("(256)", "").replace("(257)", "").replace("HD+", "").strip()
-            
+            channel_name_original_from_link = link.text.strip() # Es. "Sky Calcio 1 Italy HD+"
+
+            # Nome da usare per il lookup nella mappa DADDYLIVE_CHANNEL_NAME_MAP.
+            # Rimuoviamo "Italy", "HD+" e convertiamo in lowercase per un matching più flessibile.
+            name_for_map_lookup = channel_name_original_from_link.replace("Italy", "").replace("HD+", "").strip().lower()
+
+            mapped_name = DADDYLIVE_CHANNEL_NAME_MAP.get(name_for_map_lookup)
+
+            if mapped_name:
+                # Se abbiamo una mappatura (es. "sky calcio 1" -> "Sky Sport 251"), usiamo quella.
+                channel_name_final_display = mapped_name
+            else:
+                # Altrimenti, applichiamo la pulizia più generale.
+                channel_name_final_display = channel_name_original_from_link.replace("Italy", "") \
+                                                                        .replace("8", "") \
+                                                                        .replace("(251)", "").replace("(252)", "").replace("(253)", "") \
+                                                                        .replace("(254)", "").replace("(255)", "").replace("(256)", "") \
+                                                                        .replace("(257)", "") \
+                                                                        .replace("HD+", "").strip()
+
             href = link['href']
             stream_number = href.split('-')[-1].replace('.php', '')
 
-            if "dazn 1" in channel_name_clean.lower():
+            if "dazn 1" in channel_name_final_display.lower(): # Usa il nome finale per il check
                 stream_number = "877" # ID corretto per DAZN 1
                 processed_dazn1 = True
 
             stream_url_dynamic = f"https://daddylive.dad/stream/stream-{stream_number}.php"
             final_url = stream_url_dynamic
             if mfp_url and mfp_password:
-                final_url = f"{mfp_url}/extractor/video?host=DLHD&d=&redirect_stream=true&api_password={mfp_password}&d={urllib.parse.quote(stream_url_dynamic)}"
+                final_url = f"{mfp_url}/extractor/video?host=DLHD&redirect_stream=true&api_password={mfp_password}&d={urllib.parse.quote(stream_url_dynamic)}"
             
             streams.append({
-                'id': f"omgtv-247ita-{channel_name_clean.lower().replace(' ', '-')}", # ID per MammaMia
-                'title': f"{channel_name_clean} (D)",
+                'id': f"omgtv-247ita-{channel_name_final_display.lower().replace(' ', '-')}",
+                'title': f"{channel_name_final_display} (D)",
                 'url': final_url,
-                'logo': STATIC_LOGOS_247ITA.get(channel_name_clean.lower(), "https://raw.githubusercontent.com/cribbiox/eventi/refs/heads/main/ddlive.png"),
+                'logo': STATIC_LOGOS_247ITA.get(channel_name_final_display.lower(), "https://raw.githubusercontent.com/cribbiox/eventi/refs/heads/main/ddlive.png"),
                 'group': "247ita" # Per raggruppamento in MammaMia
             })
 
@@ -125,7 +160,7 @@ async def get_247ita_streams(client, mfp_url=None, mfp_password=None):
         stream_url_dynamic_dazn = f"https://daddylive.dad/stream/stream-{stream_number_dazn}.php"
         final_url_dazn = stream_url_dynamic_dazn
         if mfp_url and mfp_password:
-            final_url_dazn = f"{mfp_url}/extractor/video?host=DLHD&d=&redirect_stream=true&api_password={mfp_password}&d={urllib.parse.quote(stream_url_dynamic_dazn)}"
+            final_url_dazn = f"{mfp_url}/extractor/video?host=DLHD&redirect_stream=true&api_password={mfp_password}&d={urllib.parse.quote(stream_url_dynamic_dazn)}"
         streams.append({
             'id': "omgtv-247ita-dazn-1",
             'title': "DAZN 1 (D)",
@@ -158,8 +193,14 @@ async def get_omgtv_streams_for_channel_id(channel_id_full: str, client, mfp_url
     elif source == "calcio":
         all_calcio_streams = await get_calcio_streams(client, mfp_url, mfp_password)
         for stream in all_calcio_streams:
-            if channel_name_query.replace("-", " ") in stream['id'].replace(f"omgtv-{source}-", "").replace("-", " "):
+            # Confronto primario: l'ID completo richiesto deve corrispondere all'ID dello stream generato.
+            if stream['id'] == channel_id_full:
                 return [stream]
+            # Fallback (meno ideale, potrebbe portare a falsi positivi se i nomi sono simili ma gli ID sorgente diversi):
+            # Controlla se la parte del nome del canale dell'ID richiesto è contenuta nella parte finale dell'ID dello stream.
+            elif channel_name_query.replace("-", " ") in stream['id'].replace(f"omgtv-{source}-", "").replace("-", " "):
+                print(f"DEBUG: Calcio stream trovato con matching parziale: req='{channel_name_query}' vs stream_id_part='{stream['id'].replace(f'omgtv-{source}-', '')}'") # LOG
+                return [stream] 
     elif source == "vavoo":
         all_vavoo_streams = await get_vavoo_streams(client, mfp_url, mfp_password)
         for stream in all_vavoo_streams:
@@ -261,30 +302,42 @@ def _format_channel_name_calcio(raw_name):
     return channel_display_name, server_label
 
 async def get_calcio_streams(client, mfp_url=None, mfp_password=None):
+    # print("DEBUG: Entrando in get_calcio_streams") # LOG
     streams = []
     raw_channel_list = CHANNELS_RAW_CALCIO + [item[1].split('/mono.m3u8')[0] + '/' for item in EXTRA_CHANNELS_CALCIO]
 
-    for raw_path_part in raw_channel_list:
-        channel_display_name, server_tag_suffix = _format_channel_name_calcio(raw_path_part)
-        original_stream_url = f"{BASE_URL_CALCIO}{raw_path_part}mono.m3u8"
-        
-        final_url = original_stream_url
-        if mfp_url and mfp_password:
-            final_url = f"{mfp_url}/proxy/hls/manifest.m3u8?api_password={mfp_password}&d={urllib.parse.quote(original_stream_url)}"
-        final_url += HEADER_CALCIO_PARAMS
-        
-        # Create a unique ID part from the raw_path_part by removing "calcio" and trailing slash, then lowercasing.
-        # e.g., "calcioX1skynature/" -> "x1skynature"
-        # e.g., "calcioXskynature/"  -> "xskynature"
-        unique_id_suffix = raw_path_part.rstrip('/').replace("calcio", "").lower()
+    if not raw_channel_list:
+        # print("DEBUG: raw_channel_list è vuota in get_calcio_streams") # LOG
+        return []
 
-        streams.append({
-            'id': f"omgtv-calcio-{unique_id_suffix}", # Unique ID
-            'title': f"{channel_display_name}{server_tag_suffix}", # Differentiated title
-            'url': final_url,
-            'logo': LOGO_URL_CALCIO,
-            'group': "Calcio"
-        })
+    # print(f"DEBUG: raw_channel_list ha {len(raw_channel_list)} elementi.") # LOG
+
+    for raw_path_part in raw_channel_list:
+        try:
+            channel_display_name, server_tag_suffix = _format_channel_name_calcio(raw_path_part)
+            original_stream_url = f"{BASE_URL_CALCIO}{raw_path_part}mono.m3u8"
+            
+            final_url = original_stream_url
+            if mfp_url and mfp_password:
+                final_url = f"{mfp_url}/proxy/hls/manifest.m3u8?api_password={mfp_password}&d={urllib.parse.quote(original_stream_url)}"
+            final_url += HEADER_CALCIO_PARAMS
+            
+            unique_id_suffix = raw_path_part.rstrip('/').replace("calcio", "").lower()
+
+            stream_data = {
+                'id': f"omgtv-calcio-{unique_id_suffix}", 
+                'title': f"{channel_display_name}{server_tag_suffix}", 
+                'url': final_url,
+                'logo': LOGO_URL_CALCIO,
+                'group': "Calcio"
+            }
+            streams.append(stream_data)
+            # print(f"DEBUG: Aggiunto stream calcio: {stream_data['id']} - {stream_data['title']}") # LOG
+        except Exception as e:
+            # print(f"DEBUG: Errore durante il processamento di {raw_path_part} in get_calcio_streams: {e}") # LOG
+            continue # Continua con il prossimo canale
+            
+    # print(f"DEBUG: Uscendo da get_calcio_streams, {len(streams)} streams generati.") # LOG
     return streams
 
 
