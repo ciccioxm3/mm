@@ -314,22 +314,13 @@ async def addon_stream(request: Request,config, type, id,):
                             elif webru_url_2: # Aggiungi solo se webru_url_2 non è None
                                 streams['streams'].append({'title': f'{Icon}Server D-{i}' + channel['title'], 'url': webru_url_2, "behaviorHints": {"notWebReady": True, "proxyHeaders": {"request": {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3", "Accept": "*/*", "Accept-Language": "en-US,en;q=0.5", "Origin": Origin_webru_url_2, "DNT": "1", "Sec-GPC": "1", "Connection": "keep-alive", "Referer": Referer_webru_url_2, "Sec-Fetch-Dest": "empty", "Sec-Fetch-Mode": "cors", "Sec-Fetch-Site": "cross-site", "Pragma": "no-cache", "Cache-Control": "no-cache", "TE": "trailers"}}}})
 
-            # --- START OMGTV Integration for TV Channels ---
-            # Construct potential OMGTV IDs based on the MammaMia channel ID
-            # This is a simplified approach; a more robust mapping might be needed.
-            omgtv_sources_to_try = ["247ita", "calcio", "skystreaming", "sportstreaming", "vavoo"]
-            # Normalize MammaMia ID to a queryable name for OMGTV
-            # (e.g., "sky-sport-uno" -> "sky sport uno")
+            omgtv_sources_to_try = ["247ita", "calcio", "vavoo"]
             channel_name_query_base = id.replace('-', ' ')
 
             mfp_url_to_pass = MFP_CREDENTIALS[0] if MFP == "1" and MFP_CREDENTIALS else None
             mfp_password_to_pass = MFP_CREDENTIALS[1] if MFP == "1" and MFP_CREDENTIALS else None
 
             for omgtv_source in omgtv_sources_to_try:
-                # Attempt to find variations of the channel name if needed, e.g., "sky sport uno" vs "skysportuno"
-                # For simplicity, we'll try a direct match first.
-                # More complex matching could be added here (e.g. removing spaces, checking aliases)
-                
                 # Construct the full OMGTV-style ID to query
                 omgtv_channel_id_full = f"omgtv-{omgtv_source}-{channel_name_query_base.replace(' ', '-')}"
 
