@@ -55,6 +55,22 @@ STATIC_LOGOS_247ITA = {
     # ... altri loghi
 }
 
+# --- Definizione Canali Statici Interni ---
+STATIC_CHANNELS_DATA = [
+    {
+        "id": "sky-uno", # ID originale del canale
+        "title": "Sky Uno",
+        "url": "https://linear313-it-dash1-prd.selector.skycdn.it/016a/32477/FHD/skyuno/master.mpd&key_id=003610b8556000936e48061cdb4ee11a&key=2cd6bcc2160aa6ec048e5a5f7a0f73c8",
+        "group": "MPD"
+    },
+    {
+        "id": "sky-atlantic",
+        "title": "Sky Atlantic",
+        "url": "https://linear315-it-dash1-prd-akp2.cdn13.skycdp.com/016a/31226/FHD/skyatlantic/master.mpd&key_id=0036d37875a7307fd4551bcd6e466882&key=a8cdc74a5d05c7a45c551af45aa5549c",
+        "group": "MPD"
+    }
+]
+
 def get_247ita_channel_numeric_id(channel_name_query, html_content):
     """
     Cerca l'ID numerico di un canale specifico nell'HTML fornito.
@@ -190,6 +206,48 @@ async def get_247ita_streams(client, mfp_url=None, mfp_password=None):
         })
     return streams
 
+# --- Logica Canali Statici Interni ---
+async def get_static_channel_streams(client, mfp_url=None, mfp_password=None):
+    """
+    Recupera i canali statici definiti localmente in STATIC_CHANNELS_DATA
+    e applica la logica MFP se fornita.
+    """
+    streams = []
+    for channel_data in STATIC_CHANNELS_DATA:
+        original_channel_id = channel_data.get('id')
+        original_channel_title = channel_data.get('title')
+        original_channel_url = channel_data.get('url')
+        original_channel_logo = channel_data.get('logo') # Modificato da 'poster' a 'logo' per coerenza con STATIC_CHANNELS_DATA
+        group_name = channel_data.get('group', "Statici")
+
+        # Salta i canali se mancano informazioni essenziali, specialmente l'URL
+        if not all([original_channel_id, original_channel_title, original_channel_url, original_channel_logo]):
+            print(f"DEBUG: Canale statico saltato per dati mancanti: {channel_data}")
+            continue
+
+        # Logica per applicare il proxy MFP
+        if mfp_url and mfp_password:
+            parsed_original_url = urllib.parse.urlparse(original_channel_url)
+            original_query_params = urllib.parse.parse_qs(parsed_original_url.query)
+            original_base_url = parsed_original_url._replace(query=None).geturl() # URL senza parametri
+
+            if original_base_url.lower().endswith('.mpd'):
+                # Se è un URL MPD, usa l'endpoint MPD del proxy
+                final_url = f"{mfp_url}/proxy/mpd/manifest.m3u8?api_password={mfp_password}&d={urllib.parse.quote(original_base_url)}"
+
+        final_url = original_channel_url
+        if mfp_url and mfp_password:
+            # Applica il proxy MFP (assumendo che siano URL M3U8 diretti, quindi usa il proxy HLS)
+            final_url = f"{mfp_url}/proxy/hls/manifest.m3u8?api_password={mfp_password}&d={urllib.parse.quote(original_channel_url)}"
+
+        streams.append({
+            'id': f"omgtv-static-{original_channel_id}",
+            'title': f"{original_channel_title} (S)", # (S) per Statico
+            'url': final_url,
+            'logo': original_channel_logo,
+            'group': group_name
+        })
+    return streams
 
 async def get_omgtv_streams_for_channel_id(channel_id_full: str, client, mfp_url=None, mfp_password=None):
     """
@@ -241,6 +299,14 @@ async def get_omgtv_streams_for_channel_id(channel_id_full: str, client, mfp_url
         for stream in all_vavoo_streams:
             if channel_name_query.replace("-", " ") in stream['id'].replace(f"omgtv-{source}-", "").replace("-", " "):
                 return [stream]
+
+    elif source == "static":
+        all_static_streams = await get_static_channel_streams(client, mfp_url, mfp_password)
+        # channel_name_query è la parte dell'ID dopo "omgtv-static-", es. "rai-1"
+        target_static_id = f"omgtv-static-{channel_name_query}"
+        for stream in all_static_streams:
+            if stream['id'] == target_static_id:
+                return [stream] # Restituisce una lista con lo stream trovato
     return []
 # --- Logica Calcio ---
 BASE_URL_CALCIO = "https://calcionew.newkso.ru/calcio/"
