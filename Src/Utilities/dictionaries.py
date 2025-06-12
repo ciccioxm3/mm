@@ -120,6 +120,13 @@ STREAM = {
             "url": "http://173.208.52.200/italia1/index.m3u8"
         },
         {
+            "id": "italia-2",
+            "title": "ITALIA 2",
+            "name": "",
+            "genres": ["Intrattenimento", "Mediaset"],
+            "poster": "https://upload.wikimedia.org/wikipedia/it/thumb/c/c5/Logo_Italia2.svg/520px-Logo_Italia2.svg.png"
+        },
+        {
             "id": "topcrime",
             "title": "Top Crime",
             "name": "HD/FHD",
@@ -247,6 +254,13 @@ STREAM = {
             "poster": "https://i.imgur.com/xfbZiXs.png"
         },
         {
+            "id": "sky-cinema-due-24",
+            "title": "SKY CINEMA DUE +24",
+            "name": "",
+            "genres": ["Film", "Sky"],
+            "poster": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/italy/sky-cinema-due-plus24-it.png"
+        },
+        {
             "id": "sky-cinema-family",
             "title": "Sky Cinema Family",
             "name": "",
@@ -301,6 +315,20 @@ STREAM = {
             "name": "",
             "genres": ["Sky"],
             "poster":"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Sky_Nature.svg/1024px-Sky_Nature.svg.png"
+        },
+        {
+            "id": "nat-geo-wild",
+            "title": "NAT GEO WILD",
+            "name": "",
+            "genres": ["Documentari", "Sky"],
+            "poster": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/italy/national-geographic-wild-it.png"
+        },
+        {
+            "id": "discovery-channel",
+            "title": "DISCOVERY CHANNEL",
+            "name": "",
+            "genres": ["Documentari", "Discovery"],
+            "poster": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/italy/discovery-channel-it.png"
         },
         {
             "id": "sky-serie",
@@ -618,6 +646,140 @@ STREAM = {
             "poster": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/RSI_La_2_2012.svg/2880px-RSI_La_2_2012.svg.png"    
         },
         {
+            "id": "sky-primafila-1",
+            "title": "SKY PRIMAFILA 1",
+            "name": "",
+            "genres": ["Film", "Sky"],
+            "poster": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/italy/sky-primafila-it.png"
+        },
+        {
+            "id": "sky-primafila-2",
+            "title": "SKY PRIMAFILA 2",
+            "name": "",
+            "genres": ["Film", "Sky"],
+            "poster": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/italy/sky-primafila-it.png"
+        },
+        {
+            "id": "sky-primafila-3",
+            "title": "SKY PRIMAFILA 3",
+            "name": "",
+            "genres": ["Film", "Sky"],
+            "poster": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/italy/sky-primafila-it.png"
+        },
+        {
+            "id": "sky-primafila-4",
+            "title": "SKY PRIMAFILA 4",
+            "name": "",
+            "genres": ["Film", "Sky"],
+            "poster": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/italy/sky-primafila-it.png"
+        },
+        {
+            "id": "sky-primafila-5",
+            "title": "SKY PRIMAFILA 5",
+            "name": "",
+            "genres": ["Film", "Sky"],
+            "poster": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/italy/sky-primafila-it.png"
+        },
+        {
+            "id": "sky-primafila-6",
+            "title": "SKY PRIMAFILA 6",
+            "name": "",
+            "genres": ["Film", "Sky"],
+            "poster": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/italy/sky-primafila-it.png"
+        },
+        {
+            "id": "sky-primafila-7",
+            "title": "SKY PRIMAFILA 7",
+            "name": "",
+            "genres": ["Film", "Sky"],
+            "poster": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/italy/sky-primafila-it.png"
+        },
+        {
+            "id": "sky-primafila-8",
+            "title": "SKY PRIMAFILA 8",
+            "name": "",
+            "genres": ["Film", "Sky"],
+            "poster": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/italy/sky-primafila-it.png"
+        },
+        {
+            "id": "sky-primafila-9",
+            "title": "SKY PRIMAFILA 9",
+            "name": "",
+            "genres": ["Film", "Sky"],
+            "poster": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/italy/sky-primafila-it.png"
+        },
+        {
+            "id": "sky-primafila-10",
+            "title": "SKY PRIMAFILA 10",
+            "name": "",
+            "genres": ["Film", "Sky"],
+            "poster": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/italy/sky-primafila-it.png"
+        },
+        {
+            "id": "sky-primafila-11",
+            "title": "SKY PRIMAFILA 11",
+            "name": "",
+            "genres": ["Film", "Sky"],
+            "poster": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/italy/sky-primafila-it.png"
+        },
+        {
+            "id": "sky-primafila-12",
+            "title": "SKY PRIMAFILA 12",
+            "name": "",
+            "genres": ["Film", "Sky"],
+            "poster": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/italy/sky-primafila-it.png"
+        },
+        {
+            "id": "sky-primafila-13",
+            "title": "SKY PRIMAFILA 13",
+            "name": "",
+            "genres": ["Film", "Sky"],
+            "poster": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/italy/sky-primafila-it.png"
+        },
+        {
+            "id": "sky-primafila-14",
+            "title": "SKY PRIMAFILA 14",
+            "name": "",
+            "genres": ["Film", "Sky"],
+            "poster": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/italy/sky-primafila-it.png"
+        },
+        {
+            "id": "sky-primafila-15",
+            "title": "SKY PRIMAFILA 15",
+            "name": "",
+            "genres": ["Film", "Sky"],
+            "poster": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/italy/sky-primafila-it.png"
+        },
+        {
+            "id": "sky-primafila-16",
+            "title": "SKY PRIMAFILA 16",
+            "name": "",
+            "genres": ["Film", "Sky"],
+            "poster": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/italy/sky-primafila-it.png"
+        },
+        {
+            "id": "sky-primafila-17",
+            "title": "SKY PRIMAFILA 17",
+            "name": "",
+            "genres": ["Film", "Sky"],
+            "poster": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/italy/sky-primafila-it.png"
+        },
+        {
+            "id": "sky-primafila-18",
+            "title": "SKY PRIMAFILA 18",
+            "name": "",
+            "genres": ["Film", "Sky"],
+            "poster": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/italy/sky-primafila-it.png"
+        },
+        {
+            "id": "top-gear",
+            "title": "Top Gear TV",
+            "name": "",
+            "genres": ["Rakuten"],
+            "poster": "https://upload.wikimedia.org/wikipedia/de/b/b9/TopGearLogo.jpg",
+            "url": "https://service-stitcher.clusters.pluto.tv/v1/stitch/embed/hls/channel/64c109a4798def0008a6e03e/master.m3u8?deviceId=channel&deviceModel=web&deviceVersion=1.0&appVersion=1.0&deviceType=rokuChannel&deviceMake=rokuChannel&deviceDNT=1&advertisingId=channel&embedPartner=rokuChannel&appName=rokuchannel&is_lat=1&bmodel=bm1&content=channel&platform=web&tags=ROKU_CONTENT_TAGS&coppa=false&content_type=livefeed&rdid=channel&genre=ROKU_ADS_CONTENT_GENRE&content_rating=ROKU_ADS_CONTENT_RATING&studio_id=viacom&channel_id=channel"
+        },
+        {
             "id": "adrenaline-movies",
             "title": "Rakuten Adrenaline Movies",
             "name": "",
@@ -744,139 +906,6 @@ STREAM = {
             "genres": ["Pluto"],
             "poster": "https://images.pluto.tv/channels/60b9dc99521a1400079bdfba/colorLogoPNG.png"
             # URL rimosso perché sarà dinamico
-        },
-        {
-            "id": "italia-2",
-            "title": "ITALIA 2",
-            "name": "",
-            "genres": ["Intrattenimento", "Mediaset"],
-            "poster": "https://upload.wikimedia.org/wikipedia/it/thumb/c/c5/Logo_Italia2.svg/520px-Logo_Italia2.svg.png"
-        },
-        {
-            "id": "sky-primafila-7",
-            "title": "SKY PRIMAFILA 7",
-            "name": "",
-            "genres": ["Film", "Sky"],
-            "poster": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/italy/sky-primafila-it.png"
-        },
-        {
-            "id": "sky-primafila-8",
-            "title": "SKY PRIMAFILA 8",
-            "name": "",
-            "genres": ["Film", "Sky"],
-            "poster": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/italy/sky-primafila-it.png"
-        },
-        {
-            "id": "sky-primafila-9",
-            "title": "SKY PRIMAFILA 9",
-            "name": "",
-            "genres": ["Film", "Sky"],
-            "poster": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/italy/sky-primafila-it.png"
-        },
-        {
-            "id": "rai-yoyo",
-            "title": "RAI YOYO",
-            "name": "",
-            "genres": ["Intrattenimento", "Rai Tv"],
-            "poster": "https://www.vavoo.tv/software/images/logo.png"
-        },
-        {
-            "id": "sky-primafila-6",
-            "title": "SKY PRIMAFILA 6",
-            "name": "",
-            "genres": ["Film", "Sky"],
-            "poster": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/italy/sky-primafila-it.png"
-        },
-        {
-            "id": "sky-primafila-1",
-            "title": "SKY PRIMAFILA 1",
-            "name": "",
-            "genres": ["Film", "Sky"],
-            "poster": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/italy/sky-primafila-it.png"
-        },
-        {
-            "id": "sky-primafila-4",
-            "title": "SKY PRIMAFILA 4",
-            "name": "",
-            "genres": ["Film", "Sky"],
-            "poster": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/italy/sky-primafila-it.png"
-        },
-        {
-            "id": "sky-primafila-2",
-            "title": "SKY PRIMAFILA 2",
-            "name": "",
-            "genres": ["Film", "Sky"],
-            "poster": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/italy/sky-primafila-it.png"
-        },
-        {
-            "id": "sky-primafila-17",
-            "title": "SKY PRIMAFILA 17",
-            "name": "",
-            "genres": ["Film", "Sky"],
-            "poster": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/italy/sky-primafila-it.png"
-        },
-        {
-            "id": "sky-primafila-16",
-            "title": "SKY PRIMAFILA 16",
-            "name": "",
-            "genres": ["Film", "Sky"],
-            "poster": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/italy/sky-primafila-it.png"
-        },
-        {
-            "id": "sky-primafila-3",
-            "title": "SKY PRIMAFILA 3",
-            "name": "",
-            "genres": ["Film", "Sky"],
-            "poster": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/italy/sky-primafila-it.png"
-        },
-        {
-            "id": "discovery-channel",
-            "title": "DISCOVERY CHANNEL",
-            "name": "",
-            "genres": ["Documentari", "Discovery"],
-            "poster": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/italy/discovery-channel-it.png"
-        },
-        {
-            "id": "sky-primafila-14",
-            "title": "SKY PRIMAFILA 14",
-            "name": "",
-            "genres": ["Film", "Sky"],
-            "poster": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/italy/sky-primafila-it.png"
-        },
-        {
-            "id": "sky-primafila-18",
-            "title": "SKY PRIMAFILA 18",
-            "name": "",
-            "genres": ["Film", "Sky"],
-            "poster": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/italy/sky-primafila-it.png"
-        },
-        {
-            "id": "sky-primafila-12",
-            "title": "SKY PRIMAFILA 12",
-            "name": "",
-            "genres": ["Film", "Sky"],
-            "poster": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/italy/sky-primafila-it.png"
-        },
-        {
-            "id": "sky-primafila-15",
-            "title": "SKY PRIMAFILA 15",
-            "name": "",
-            "genres": ["Film", "Sky"],
-            "poster": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/italy/sky-primafila-it.png"
-        },
-        {
-            "id": "nat-geo-wild",
-            "title": "NAT GEO WILD",
-            "name": "",
-            "genres": ["Documentari", "Sky"],
-            "poster": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/italy/national-geographic-wild-it.png"
-        },
-        {
-            "id": "sky-cinema-due-24",
-            "title": "SKY CINEMA DUE +24",
-            "name": "",
-            "genres": ["Film", "Sky"],
-            "poster": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/italy/sky-cinema-due-plus24-it.png"
         }
     ]
 }
