@@ -101,16 +101,7 @@ STREAM = {
             "title": "Rete 4",
             "name": "Full HD Http",
             "genres": ["Mediaset"],
-            "poster": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Rete_4_2018.svg/1024px-Rete_4_2018.svg.png",
-            "url": "http://173.208.52.200/rete4/index.m3u8"
-        },
-        {
-            "id": "euronews",
-            "title": "Euronews",
-            "name": "720p",
-            "genres": ["Euronews"],
-            "poster": "https://yt3.googleusercontent.com/t3slq37NYJRuP2UoEZDoPKyMClKyQULG8-j2DEfzL1XXcBvFpR6z6HD7rtc0wDn8Mqt0OtpU=s900-c-k-c0x00ffffff-no-rj",
-            "url": "https://rakuten-euronews-3-it.samsung.wurl.tv/manifest/playlist.m3u8"
+            "poster": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/Rete_4_-_Logo_2018.svg/1024px-Rete_4_-_Logo_2018.svg.png"
         },
         {
             "id": "canale-5",
@@ -309,7 +300,7 @@ STREAM = {
             "title": "Sky Nature",
             "name": "",
             "genres": ["Sky"],
-            "poster":"https://search.bus-hit.me/image_proxy?url=https%3A%2F%2Fstatic.wikia.nocookie.net%2Flogosfake%2Fimages%2Fa%2Fad%2FSky_Nature_Generic_ID_2020.png%2Frevision%2Flatest%2Fscale-to-width-down%2F1200%3Fcb%3D20200725184630&h=71ab69ffa3abfe2ce6c20912b44f862adff4f10b9d4d761c18d292b7ffa3e9a9"
+            "poster":"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Sky_Nature.svg/1024px-Sky_Nature.svg.png"
         },
         {
             "id": "sky-serie",
@@ -338,7 +329,7 @@ STREAM = {
             "title": "Sky Sport Golf",
             "name": "",
             "genres": ["Sky"],
-            "poster": "https://search.bus-hit.me/image_proxy?url=https%3A%2F%2Fencrypted-tbn0.gstatic.com%2Fimages%3Fq%3Dtbn%3AANd9GcRQoDZOK798-OYz0E_NAahzde_JW-hLcHK-PjLm0rCXyVVcj_Y%26s&h=4b1b7a276442b52778daf26f745d06f57ff6c0cf401f4d7f3e371a566247f3ef"
+            "poster": "https://scontent-fra3-2.xx.fbcdn.net/v/t39.30808-6/355705088_762776855850002_5111452123456427866_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=-ubj97H2ENQQ7kNvwHHc7MR&_nc_oc=AdnsmV9fNun-N4tN-_GssiC3OT73gcJ0z9O2DeeXXm7u9eXHcQVxbtPbYLZCxTIno4E&_nc_zt=23&_nc_ht=scontent-fra3-2.xx&_nc_gid=88vxLZNCS4S7cHdsvcAUFw&oh=00_AfNhylOoB327G41AAUeFW47Z5RtGJ1rTXxCcfxUHfrxwWA&oe=6850675F"
         },
         {
             "id": "sky-sport-251",
@@ -481,11 +472,25 @@ STREAM = {
             "poster": "https://i.ytimg.com/vi/0cEfGLq-tz4/maxresdefault.jpg"
         },
         {
+            "id": "zona-dazn",
+            "title": "ZONA DAZN",
+            "name": "",
+            "genres": ["Sport"],
+            "poster": "https://www.digital-news.it/img/palinsesti/2023/12/1701423631-zona-dazn.webp"
+        },
+        {
             "id": "dazn-1",
             "title": "DAZN 1",
             "name": "",
             "genres": ["DAZN"],
             "poster": "https://i.ytimg.com/vi/0cEfGLq-tz4/maxresdefault.jpg"
+        },
+        {
+            "id": "dazn-2",
+            "title": "DAZN 2",
+            "name": "",
+            "genres": ["Sport"],
+            "poster": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/DAZN_2.svg/882px-DAZN_2.svg.png"
         },
         {
             "id": "eurosport-1",
@@ -599,11 +604,18 @@ STREAM = {
             "url": "https://di-kzbhv8pw.vo.lswcdn.net/sportitalia/sihd/playlist.m3u8"
         },
         {
+            "id": "rsi-la-1",
+            "title": "RSI LA 1",
+            "name": "",
+            "genres": ["Altro"],
+            "poster": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/RSI_La_1_2012.svg/2880px-RSI_La_1_2012.svg.png"
+        },
+        {
             "id": "rsi-la-2",
             "title": "RSI LA 2",
             "name": "",
             "genres": ["RSI"],
-            "poster": "https://livehere.one/img/rsi.png"    
+            "poster": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/RSI_La_2_2012.svg/2880px-RSI_La_2_2012.svg.png"    
         },
         {
             "id": "adrenaline-movies",
@@ -741,34 +753,6 @@ STREAM = {
             "poster": "https://upload.wikimedia.org/wikipedia/it/thumb/c/c5/Logo_Italia2.svg/520px-Logo_Italia2.svg.png"
         },
         {
-            "id": "zona-dazn",
-            "title": "ZONA DAZN",
-            "name": "",
-            "genres": ["Sport"],
-            "poster": "https://www.digital-news.it/img/palinsesti/2023/12/1701423631-zona-dazn.webp"
-        },
-        {
-            "id": "tg-com-24",
-            "title": "TG COM 24",
-            "name": "",
-            "genres": ["Notizie", "Mediaset"],
-            "poster": "https://yt3.googleusercontent.com/ytc/AIdro_kVh4SupZFtHrALXp9dRWD9aahJOUfl8rhSF8VroefSLg=s900-c-k-c0x00ffffff-no-rj"
-        },
-        {
-            "id": "sky-primafila-8",
-            "title": "SKY PRIMAFILA 8",
-            "name": "",
-            "genres": ["Film", "Sky"],
-            "poster": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/italy/sky-primafila-it.png"
-        },
-        {
-            "id": "la-5",
-            "title": "LA 5",
-            "name": "",
-            "genres": ["Altro"],
-            "poster": "https://www.vavoo.tv/software/images/logo.png"
-        },
-        {
             "id": "sky-primafila-7",
             "title": "SKY PRIMAFILA 7",
             "name": "",
@@ -776,25 +760,11 @@ STREAM = {
             "poster": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/italy/sky-primafila-it.png"
         },
         {
-            "id": "boing-plus",
-            "title": "BOING PLUS",
+            "id": "sky-primafila-8",
+            "title": "SKY PRIMAFILA 8",
             "name": "",
-            "genres": ["Bambini"],
-            "poster": "https://www.vavoo.tv/software/images/logo.png"
-        },
-        {
-            "id": "rsi-la-1",
-            "title": "RSI LA 1",
-            "name": "",
-            "genres": ["Altro"],
-            "poster": "https://www.vavoo.tv/software/images/logo.png"
-        },
-        {
-            "id": "deejay-tv",
-            "title": "DEEJAY TV",
-            "name": "",
-            "genres": ["Altro"],
-            "poster": "https://www.vavoo.tv/software/images/logo.png"
+            "genres": ["Film", "Sky"],
+            "poster": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/italy/sky-primafila-it.png"
         },
         {
             "id": "sky-primafila-9",
@@ -851,13 +821,6 @@ STREAM = {
             "name": "",
             "genres": ["Film", "Sky"],
             "poster": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/italy/sky-primafila-it.png"
-        },
-        {
-            "id": "dazn-2",
-            "title": "DAZN 2",
-            "name": "",
-            "genres": ["Sport"],
-            "poster": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/DAZN_2.svg/882px-DAZN_2.svg.png"
         },
         {
             "id": "sky-primafila-3",
