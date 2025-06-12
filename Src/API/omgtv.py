@@ -160,16 +160,6 @@ async def get_omgtv_streams_for_channel_id(channel_id_full: str, client, mfp_url
         for stream in all_calcio_streams:
             if channel_name_query.replace("-", " ") in stream['id'].replace(f"omgtv-{source}-", "").replace("-", " "):
                 return [stream]
-    elif source == "skystreaming":
-        all_skystreaming_streams = await get_skystreaming_streams(client, mfp_url, mfp_password) # client qui è aiohttp session
-        for stream in all_skystreaming_streams:
-            if channel_name_query.replace("-", " ") in stream['id'].replace(f"omgtv-{source}-", "").replace("-", " "):
-                return [stream]
-    elif source == "sportstreaming":
-        all_sportstreaming_streams = await get_sportstreaming_streams(client, mfp_url, mfp_password)
-        for stream in all_sportstreaming_streams:
-            if channel_name_query.replace("-", " ") in stream['id'].replace(f"omgtv-{source}-", "").replace("-", " "):
-                return [stream]
     elif source == "vavoo":
         all_vavoo_streams = await get_vavoo_streams(client, mfp_url, mfp_password)
         for stream in all_vavoo_streams:
@@ -182,10 +172,47 @@ LOGO_URL_CALCIO = "https://i.postimg.cc/NFGs2Ptq/photo-2025-03-12-12-36-48.png"
 HEADER_CALCIO_PARAMS = "&h_user-agent=Mozilla%2F5.0+%28iPhone%3B+CPU+iPhone+OS+17_7+like+Mac+OS+X%29+AppleWebKit%2F605.1.15+%28KHTML%2C+like+Gecko%29+Version%2F18.0+Mobile%2F15E148+Safari%2F604.1&h_referer=https%3A%2F%2Fcalcionew.newkso.ru%2F&h_origin=https%3A%2F%2Fcalcionew.newkso.ru"
 
 CHANNELS_RAW_CALCIO = [
-    "Dazn1/", "calcioX1eurosport1/", "calcioX1eurosport2/", "calcioX1formula1/",
-    "calcioX1skycinemacollection/", "calcioX1skycinemauno/", "calcioX1skysport24/",
-    "calcioX1skysportcalcio/", "calcioX1skysportf1/", "calcioX1skysportmotogp/",
-    "calcioX1skysportuno/", "calcioX1skyuno/",
+
+ "calcioX1ac/", "calcioX1comedycentral/",
+    "calcioX1eurosport1/", "calcioX1eurosport2/", "calcioX1formula1/", "calcioX1history/",
+    "calcioX1seriesi/", "calcioX1sky258/", "calcioX1sky259/", "calcioX1skyatlantic/",
+    "calcioX1skycinemacollection/", "calcioX1skycinemacomedy/", "calcioX1skycinemadrama/",
+    "calcioX1skycinemadue/", "calcioX1skycinemafamily/", "calcioX1skycinemaromance/",
+    "calcioX1skycinemasuspence/", "calcioX1skycinemauno/", "calcioX1skycrime/",
+    "calcioX1skydocumentaries/", "calcioX1skyinvestigation/", "calcioX1skynature/",
+    "calcioX1skyserie/", "calcioX1skysport24/", "calcioX1skysport251/",
+    "calcioX1skysport252/", "calcioX1skysport253/", "calcioX1skysport254/",
+    "calcioX1skysport255/", "calcioX1skysport257/", "calcioX1skysportarena/",
+    "calcioX1skysportcalcio/", "calcioX1skysportgolf/", "calcioX1skysportmax/",
+    "calcioX1skysportmotogp/", "calcioX1skysportnba/", "calcioX1skysporttennis/",
+    "calcioX1skysportuno/", "calcioX1skyuno/", "calcioX2ac/", "calcioX2comedycentral/",
+    "calcioX2eurosport1/", "calcioX2eurosport2/", "calcioX2formula/", "calcioX2formula1/",
+    "calcioX2history/", "calcioX2laliga/", "calcioX2porto/", "calcioX2portugal/",
+    "calcioX2serie/", "calcioX2serie1/", "calcioX2seriesi/", "calcioX2sky258/",
+    "calcioX2sky259/", "calcioX2skyarte/", "calcioX2skyatlantic/", "calcioX2skycinemacollection/",
+    "calcioX2skycinemacomedy/", "calcioX2skycinemadrama/", "calcioX2skycinemadue/",
+    "calcioX2skycinemafamily/", "calcioX2skycinemaromance/", "calcioX2skycinemasuspence/",
+    "calcioX2skycinemauno/", "calcioX2skycrime/", "calcioX2skydocumentaries/",
+    "calcioX2skyinvestigation/", "calcioX2skynature/", "calcioX2skyserie/",
+    "calcioX2skysport24/", "calcioX2skysport251/", "calcioX2skysport252/",
+    "calcioX2skysport253/", "calcioX2skysport254/", "calcioX2skysport255/",
+    "calcioX2skysport256/", "calcioX2skysport257/", "calcioX2skysportarena/",
+    "calcioX2skysportcalcio/", "calcioX2skysportgolf/", "calcioX2skysportmax/",
+    "calcioX2skysportmotogp/", "calcioX2skysportnba/", "calcioX2skysporttennis/",
+    "calcioX2skysportuno/", "calcioX2skyuno/", "calcioX2solocalcio/", "calcioX2sportitalia/",
+    "calcioX2zona/", "calcioX2zonab/", "calcioXac/", "calcioXcomedycentral/",
+    "calcioXeurosport1/", "calcioXeurosport2/", "calcioXformula1/", "calcioXhistory/",
+    "calcioXseriesi/", "calcioXsky258/", "calcioXsky259/", "calcioXskyarte/",
+    "calcioXskyatlantic/", "calcioXskycinemacollection/", "calcioXskycinemacomedy/",
+    "calcioXskycinemadrama/", "calcioXskycinemadue/", "calcioXskycinemafamily/",
+    "calcioXskycinemaromance/", "calcioXskycinemasuspence/", "calcioXskycinemauno/",
+    "calcioXskycrime/", "calcioXskydocumentaries/", "calcioXskyinvestigation/",
+    "calcioXskynature/", "calcioXskyserie/", "calcioXskysport24/", "calcioXskysport251/",
+    "calcioXskysport252/", "calcioXskysport253/", "calcioXskysport254/",
+    "calcioXskysport255/", "calcioXskysport256/", "calcioXskysport257/",
+    "calcioXskysportarena/", "calcioXskysportcalcio/", "calcioXskysportgolf/",
+    "calcioXskysportmax/", "calcioXskysportmotogp/", "calcioXskysportnba/",
+    "calcioXskysporttennis/", "calcioXskysportuno/", "calcioXskyuno/"
 ] # Lista ridotta per esempio
 EXTRA_CHANNELS_CALCIO = [("Sky Sport F1 Extra", "calcioXskysportf1/mono.m3u8")] # Esempio
 
@@ -194,11 +221,26 @@ def _format_channel_name_calcio(raw_name):
     for prefix in ["calcioX1", "calcioX2", "calcioX"]:
         if name.startswith(prefix): name = name[len(prefix):]
     name_map = {
-        "dazn1": "DAZN 1", "eurosport1": "Eurosport 1", "eurosport2": "Eurosport 2",
-        "formula1": "Formula 1", "skycinemacollection": "Sky Cinema Collection",
-        "skycinemauno": "Sky Cinema Uno", "skysport24": "Sky Sport 24",
-        "skysportcalcio": "Sky Sport Calcio", "skysportf1": "Sky Sport F1",
-        "skysportmotogp": "Sky Sport MotoGP", "skysportuno": "Sky Sport Uno", "skyuno": "Sky Uno",
+        "ac": "Sky Cinema Action",
+     "comedycentral": "Comedy Central", "dazn1": "DAZN 1",
+        "eurosport1": "Eurosport 1", "eurosport2": "Eurosport 2", "formula": "Formula 1",
+        "formula1": "Formula 1", "history": "History", "juve": "Juventus", "laliga": "LaLiga",
+        "ligue1": "Ligue 1", "pisa": "Pisa", "porto": "Porto", "portugal": "Portugal",
+        "saler": "Salernitana", "samp": "Sampdoria", "sass": "Sassuolo", "serie": "Serie A",
+        "serie1": "Serie A 1", "seriesi": "Sky Serie", "sky258": "Sky 258", "sky259": "Sky 259",
+        "skyarte": "Sky Arte", "skyatlantic": "Sky Atlantic", "skycinemacollection": "Sky Cinema Collection",
+        "skycinemacomedy": "Sky Cinema Comedy", "skycinemadrama": "Sky Cinema Drama",
+        "skycinemadue": "Sky Cinema Due", "skycinemafamily": "Sky Cinema Family",
+        "skycinemaromance": "Sky Cinema Romance", "skycinemasuspence": "Sky Cinema Suspense",
+        "skycinemauno": "Sky Cinema Uno", "skycrime": "Sky Crime", "skydocumentaries": "Sky Documentaries",
+        "skyinvestigation": "Sky Investigation", "skynature": "Sky Nature", "skyserie": "Sky Serie",
+        "skysport24": "Sky Sport 24", "skysport251": "Sky Sport 251", "skysport252": "Sky Sport 252",
+        "skysport253": "Sky Sport 253", "skysport254": "Sky Sport 254", "skysport255": "Sky Sport 255",
+        "skysport256": "Sky Sport 256", "skysport257": "Sky Sport 257", "skysportarena": "Sky Sport Arena",
+        "skysportcalcio": "Sky Sport Calcio", "skysportgolf": "Sky Sport Golf", "skysportmax": "Sky Sport Max",
+        "skysportmotogp": "Sky Sport MotoGP", "skysportnba": "Sky Sport NBA", "skysporttennis": "Sky Sport Tennis",
+        "skysportuno": "Sky Sport Uno", "skyuno": "Sky Uno", "solocalcio": "Solo Calcio",
+        "sportitalia": "Sportitalia", "zona": "Zona DAZN", "zonab": "Zona B"
     }
     return name_map.get(name.lower(), name.capitalize())
 
@@ -225,138 +267,6 @@ async def get_calcio_streams(client, mfp_url=None, mfp_password=None):
         })
     return streams
 
-# --- Logica SkyStreaming ---
-# Nota: SkyStreaming usa aiohttp. MammaMia usa curl_cffi.requests.AsyncSession.
-# Per ora, passiamo il client di MammaMia, ma la logica interna di skystreaming
-# potrebbe necessitare di adattamenti se usa funzionalità specifiche di aiohttp non presenti in AsyncSession.
-# Per semplicità, creo una nuova sessione aiohttp qui, ma l'ideale sarebbe adattare le chiamate.
-
-SKYSTR_SKYSTR = "yoga" # Dovrebbe venire da config o env
-
-# BASE_URL_SKYSTREAMING = f"https://skystreaming.{SKYSTR_SKYSTR}" # Replaced by config.SKY_DOMAIN
-BASE_URL_SKYSTREAMING = config.SKY_DOMAIN # Use MammaMia's config
-
-HEADERS_SKYSTREAMING = {
-   "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36",
-   "Accept": "*/*", "Accept-Language": "it-IT,it;q=0.9", "Connection": "keep-alive"
-}
-SKYSTR_TVG_ID_MAP_SKYSTREAMING = {
-   "Eurosport 1": "eurosport1.it", "Sky Sport Tennis": "skysporttennis.it",
-} # Mappa ridotta
-
-async def _get_skystreaming_url_details(skystreaming_link, client): # Takes AsyncSession client
-    channel_name_fallback = skystreaming_link.split('/')[-1].split('.')[0].replace('-', ' ')
-    try:
-        response = await client.get(skystreaming_link, headers=HEADERS_SKYSTREAMING, allow_redirects=True, impersonate="chrome120")
-        response.raise_for_status()
-        origin_page_url = urllib.parse.urlparse(str(response.url))
-        origin_page = f"{origin_page_url.scheme}://{origin_page_url.netloc}"
-        html_content = response.text
-        soup = BeautifulSoup(html_content, 'html.parser')
-        h2_tag = soup.find('h2', {'itemprop': 'name'})
-        channel_name = h2_tag.get_text(strip=True) if h2_tag else channel_name_fallback
-        iframe = soup.find('iframe', src=True)
-        if iframe:
-            iframe_src = iframe['src']
-            if not iframe_src.startswith('http'): iframe_src = urllib.parse.urljoin(origin_page, iframe_src) # Use origin_page for relative URLs
-            
-            iframe_response = await client.get(iframe_src, headers=HEADERS_SKYSTREAMING, allow_redirects=True, impersonate="chrome120")
-            iframe_response.raise_for_status()
-            iframe_html = iframe_response.text
-            iframe_soup = BeautifulSoup(iframe_html, 'html.parser')
-            source_tag = iframe_soup.find('source', {'type':'application/x-mpegURL'}, src=True)
-            if source_tag:
-                m3u8_url = source_tag['src']
-                return m3u8_url, origin_page, channel_name
-        return None, None, channel_name
-    except Exception as e:
-        print(f"Error in _get_skystreaming_url_details for {skystreaming_link}: {e}")
-        return None, None, channel_name_fallback
-
-async def get_skystreaming_streams(client, mfp_url=None, mfp_password=None):
-    streams = []
-    # Example: dynamically discover these from BASE_URL_SKYSTREAMING or a known list
-    # For now, let's use a few example channel pages similar to the original intent
-    # This part would ideally involve scraping BASE_URL_SKYSTREAMING for categories and then channels
-    # For demonstration, we'll hardcode a couple of potential channel page URLs
-    example_channel_slugs = ["eurosport-1", "sky-sport-tennis"] # Slugs or paths
-    example_channel_pages = [f"{BASE_URL_SKYSTREAMING}/channel/video/{slug}" for slug in example_channel_slugs]
-    
-    tasks = [_get_skystreaming_url_details(url, client) for url in example_channel_pages]
-    results = await asyncio.gather(*tasks)
-
-    for m3u8_url, origin_page, channel_name in results:
-        if m3u8_url and origin_page:
-            final_url = m3u8_url
-            if mfp_url and mfp_password:
-                encoded_link = urllib.parse.quote(m3u8_url)
-                user_agent = urllib.parse.quote(HEADERS_SKYSTREAMING["User-Agent"])
-                # Referer should ideally be the page where the iframe/player was found
-                referer = urllib.parse.quote(origin_page + "/") # A more generic referer
-                origin_header_val = urllib.parse.quote(origin_page)
-                final_url = f"{mfp_url}/proxy/hls/manifest.m3u8?api_password={mfp_password}&d={encoded_link}&h_user-agent={user_agent}&h_referer={referer}&h_origin={origin_header_val}"
-
-            channel_id_safe = channel_name.lower().replace(' ', '-').replace('+', '')
-            streams.append({
-                'id': f"omgtv-skystreaming-{channel_id_safe}",
-                'title': f"{channel_name} (SS)", # SS for SkyStreaming (OMGTV)
-                'url': final_url,
-                'logo': f"{BASE_URL_SKYSTREAMING}/content/auto_site_logo.png", # Generic logo
-                'group': "SkyStreaming (OMGTV)"
-            })
-    return streams
-
-# --- Logica SportStreaming ---
-BASE_URL_SPORTSTREAMING = "https://www.sportstreaming.net/"
-HEADERS_SPORTSTREAMING = {
-    "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 17_7 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1",
-    "Origin": "https://www.sportstreaming.net", "Referer": "https://www.sportstreaming.net/"
-}
-TEMP_CHANNEL_LOGO_SPORTSTREAMING = "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/Sky_italia_2018.png/500px-Sky_italia_2018.png"
-
-async def _get_event_details_sportstreaming(event_url, client): # Usa client MammaMia
-    try:
-        response = await client.get(event_url, headers=HEADERS_SPORTSTREAMING, impersonate="chrome120")
-        response.raise_for_status()
-        soup = BeautifulSoup(response.text, 'html.parser')
-        stream_url = None
-        for iframe in soup.find_all('iframe', src=True):
-            src = iframe.get('src')
-            if src and ("stream" in src.lower() or re.search(r'\.(m3u8|mp4|ts|html|php)', src, re.IGNORECASE)):
-                stream_url = src; break
-        # ... (logica di fallback per embed, video come nell'originale) ...
-        title_tag = soup.find('title')
-        event_title = title_tag.get_text(strip=True).replace("| Sport Streaming", "").strip() if title_tag else "Unknown Event"
-        return stream_url, event_title
-    except Exception as e:
-        print(f"Error in _get_event_details_sportstreaming for {event_url}: {e}")
-        return None, "Unknown Event"
-
-async def get_sportstreaming_streams(client, mfp_url=None, mfp_password=None):
-    streams = []
-    # Logica semplificata per ottenere pagine evento (dovrebbe essere più robusta)
-    example_event_pages = [f"{BASE_URL_SPORTSTREAMING}/live-perma-1", f"{BASE_URL_SPORTSTREAMING}/live-temp-1"]
-
-    for event_page_url in example_event_pages:
-        original_stream_url, event_title = await _get_event_details_sportstreaming(event_page_url, client)
-        if original_stream_url:
-            final_url = original_stream_url
-            if mfp_url and mfp_password:
-                encoded_ua = urllib.parse.quote_plus(HEADERS_SPORTSTREAMING["User-Agent"])
-                encoded_referer = urllib.parse.quote_plus(HEADERS_SPORTSTREAMING["Referer"])
-                encoded_origin = urllib.parse.quote_plus(HEADERS_SPORTSTREAMING["Origin"])
-                final_url = f"{mfp_url}/proxy/hls/manifest.m3u8?api_password={mfp_password}&d={urllib.parse.quote(original_stream_url)}&h_user-agent={encoded_ua}&h_referer={encoded_referer}&h_origin={encoded_origin}"
-
-            channel_id_safe = event_title.lower().replace(' ', '-').replace('+', '')
-            logo = TEMP_CHANNEL_LOGO_SPORTSTREAMING if "live-temp" in event_page_url else "https://sportstreaming.net/assets/img/live/standard/live1.png"
-            streams.append({
-                'id': f"omgtv-sportstreaming-{channel_id_safe}",
-                'title': f"{event_title} (SpS)",
-                'url': final_url,
-                'logo': logo,
-                'group': "SportStreaming"
-            })
-    return streams
 
 # --- Logica Vavoo ---
 BASE_URL_VAVOO = "https://vavoo.to"
