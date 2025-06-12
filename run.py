@@ -300,16 +300,16 @@ async def addon_stream(request: Request,config, type, id,):
 
             omgtv_sources_to_try = ["247ita", "calcio", "vavoo", "static"] # Assicurati che "static" sia qui
             channel_name_query_base = id.replace('-', ' ')
-            print(f"DEBUG RUN.PY: addon_stream per TV ID: {id}, channel_name_query_base: {channel_name_query_base}")
+            # print(f"DEBUG RUN.PY: addon_stream per TV ID: {id}, channel_name_query_base: {channel_name_query_base}")
 
             mfp_url_to_pass = MFP_CREDENTIALS[0] if MFP == "1" and MFP_CREDENTIALS else None
             mfp_password_to_pass = MFP_CREDENTIALS[1] if MFP == "1" and MFP_CREDENTIALS else None
-            print(f"DEBUG RUN.PY: MFP URL da passare: {mfp_url_to_pass}, MFP Password presente: {'Sì' if mfp_password_to_pass else 'No'}")
+            # print(f"DEBUG RUN.PY: MFP URL da passare: {mfp_url_to_pass}, MFP Password presente: {'Sì' if mfp_password_to_pass else 'No'}")
 
             for omgtv_source in omgtv_sources_to_try:
                 # Construct the full OMGTV-style ID to query
                 omgtv_channel_id_full = f"omgtv-{omgtv_source}-{channel_name_query_base.replace(' ', '-')}"
-                print(f"DEBUG RUN.PY: Tentativo sorgente OMGTV: {omgtv_source}, ID completo query: {omgtv_channel_id_full}")
+                # print(f"DEBUG RUN.PY: Tentativo sorgente OMGTV: {omgtv_source}, ID completo query: {omgtv_channel_id_full}")
                 
                 omgtv_stream_list = await get_omgtv_streams_for_channel_id(
                     channel_id_full=omgtv_channel_id_full,
@@ -319,7 +319,7 @@ async def addon_stream(request: Request,config, type, id,):
                 )
                 if omgtv_stream_list:
                     for stream_item in omgtv_stream_list:
-                        print(f"DEBUG RUN.PY: Aggiungendo stream da OMGTV ({omgtv_source}): {stream_item.get('title')}")
+                        # print(f"DEBUG RUN.PY: Aggiungendo stream da OMGTV ({omgtv_source}): {stream_item.get('title')}")
                         # Ensure unique titles if multiple OMGTV sources provide the same channel
                         stream_title = f"{Icon}{stream_item.get('title', f'{channel_name_query_base.title()} ({omgtv_source.upper()})')}"
                         streams['streams'].append({
