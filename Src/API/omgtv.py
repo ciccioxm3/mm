@@ -217,21 +217,36 @@ CHANNELS_RAW_CALCIO = [
 EXTRA_CHANNELS_CALCIO = [("Sky Sport F1 Extra", "calcioXskysportf1/mono.m3u8")] # Esempio
 
 def _format_channel_name_calcio(raw_name):
-    name = raw_name.rstrip("/")
-    for prefix in ["calcioX1", "calcioX2", "calcioX"]:
-        if name.startswith(prefix): name = name[len(prefix):]
+    name_part = raw_name.rstrip("/") # e.g. "calcioX1skynature"
+    
+    server_label = ""
+    processed_name_part = name_part
+
+    if name_part.startswith("calcioX1"):
+        server_label = " (CT1)"
+        processed_name_part = name_part[len("calcioX1"):] # e.g. "skynature"
+    elif name_part.startswith("calcioX2"):
+        server_label = " (CT2)"
+        processed_name_part = name_part[len("calcioX2"):]
+    elif name_part.startswith("calcioX3"): # Must be after X1 and X2 checks
+        server_label = " (CT3)"
+        processed_name_part = name_part[len("calcioX3"):]
+    elif name_part.startswith("calcioX"): # Must be after X1 and X2 checks
+        server_label = " (CTX)"
+        processed_name_part = name_part[len("calcioX"):]
+
     name_map = {
         "ac": "Sky Cinema Action",
      "comedycentral": "Comedy Central", "dazn1": "DAZN 1",
         "eurosport1": "Eurosport 1", "eurosport2": "Eurosport 2", "formula": "Formula 1",
         "formula1": "Formula 1", "history": "History", "juve": "Juventus", "laliga": "LaLiga",
         "ligue1": "Ligue 1", "pisa": "Pisa", "porto": "Porto", "portugal": "Portugal",
-        "saler": "Salernitana", "samp": "Sampdoria", "sass": "Sassuolo", "serie": "Serie A",
+        "serie": "Serie A", # Typo fixed: Suspense
         "serie1": "Serie A 1", "seriesi": "Sky Serie", "sky258": "Sky 258", "sky259": "Sky 259",
         "skyarte": "Sky Arte", "skyatlantic": "Sky Atlantic", "skycinemacollection": "Sky Cinema Collection",
         "skycinemacomedy": "Sky Cinema Comedy", "skycinemadrama": "Sky Cinema Drama",
         "skycinemadue": "Sky Cinema Due", "skycinemafamily": "Sky Cinema Family",
-        "skycinemaromance": "Sky Cinema Romance", "skycinemasuspence": "Sky Cinema Suspense",
+        "skycinemaromance": "Sky Cinema Romance", "skycinemasuspense": "Sky Cinema Suspense",
         "skycinemauno": "Sky Cinema Uno", "skycrime": "Sky Crime", "skydocumentaries": "Sky Documentaries",
         "skyinvestigation": "Sky Investigation", "skynature": "Sky Nature", "skyserie": "Sky Serie",
         "skysport24": "Sky Sport 24", "skysport251": "Sky Sport 251", "skysport252": "Sky Sport 252",
@@ -240,27 +255,32 @@ def _format_channel_name_calcio(raw_name):
         "skysportcalcio": "Sky Sport Calcio", "skysportgolf": "Sky Sport Golf", "skysportmax": "Sky Sport Max",
         "skysportmotogp": "Sky Sport MotoGP", "skysportnba": "Sky Sport NBA", "skysporttennis": "Sky Sport Tennis",
         "skysportuno": "Sky Sport Uno", "skyuno": "Sky Uno", "solocalcio": "Solo Calcio",
-        "sportitalia": "Sportitalia", "zona": "Zona DAZN", "zonab": "Zona B"
+        "sportitalia": "Sportitalia", "zona": "Zona DAZN"
     }
-    return name_map.get(name.lower(), name.capitalize())
+    channel_display_name = name_map.get(processed_name_part.lower(), processed_name_part.capitalize())
+    return channel_display_name, server_label
 
 async def get_calcio_streams(client, mfp_url=None, mfp_password=None):
     streams = []
     raw_channel_list = CHANNELS_RAW_CALCIO + [item[1].split('/mono.m3u8')[0] + '/' for item in EXTRA_CHANNELS_CALCIO]
 
     for raw_path_part in raw_channel_list:
-        channel_name_formatted = _format_channel_name_calcio(raw_path_part)
+        channel_display_name, server_tag_suffix = _format_channel_name_calcio(raw_path_part)
         original_stream_url = f"{BASE_URL_CALCIO}{raw_path_part}mono.m3u8"
         
         final_url = original_stream_url
         if mfp_url and mfp_password:
             final_url = f"{mfp_url}/proxy/hls/manifest.m3u8?api_password={mfp_password}&d={urllib.parse.quote(original_stream_url)}"
         final_url += HEADER_CALCIO_PARAMS
+        
+        # Create a unique ID part from the raw_path_part by removing "calcio" and trailing slash, then lowercasing.
+        # e.g., "calcioX1skynature/" -> "x1skynature"
+        # e.g., "calcioXskynature/"  -> "xskynature"
+        unique_id_suffix = raw_path_part.rstrip('/').replace("calcio", "").lower()
 
-        channel_id_safe = channel_name_formatted.lower().replace(' ', '-').replace('+', '')
         streams.append({
-            'id': f"omgtv-calcio-{channel_id_safe}",
-            'title': f"{channel_name_formatted} (CT1)",
+            'id': f"omgtv-calcio-{unique_id_suffix}", # Unique ID
+            'title': f"{channel_display_name}{server_tag_suffix}", # Differentiated title
             'url': final_url,
             'logo': LOGO_URL_CALCIO,
             'group': "Calcio"
@@ -271,7 +291,41 @@ async def get_calcio_streams(client, mfp_url=None, mfp_password=None):
 # --- Logica Vavoo ---
 BASE_URL_VAVOO = "https://vavoo.to"
 HEADER_VAVOO_PARAMS = "&h_user-agent=VAVOO/2.6&h_referer=https://vavoo.to/"
-CHANNEL_LOGOS_VAVOO = { "sky uno": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/italy/sky-uno-it.png", "rai 1": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/italy/rai-1-it.png" } # Mappa ridotta
+
+VAVOO_CHANNEL_NAME_MAP = {
+    "sky calcio 1": "Sky Sport 251",
+    "sky calcio 2": "Sky Sport 252",
+    "sky calcio 3": "Sky Sport 253",
+    "sky calcio 4": "Sky Sport 254",
+    "sky calcio 5": "Sky Sport 255",
+    "sky calcio 6": "Sky Sport 256",
+    "sky calcio 7": "Sky Sport 257",
+    # Aggiungere altre mappature specifiche di Vavoo se necessario
+}
+
+CHANNEL_LOGOS_VAVOO = {
+    "sky uno": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/italy/sky-uno-it.png",
+    "rai 1": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/italy/rai-1-it.png",
+    "sky sport 251": "https://logodownload.org/wp-content/uploads/2020/06/sky-sports-logo-0-1.png",
+    "sky sport 252": "https://logodownload.org/wp-content/uploads/2020/06/sky-sports-logo-0-1.png",
+    "sky sport 253": "https://logodownload.org/wp-content/uploads/2020/06/sky-sports-logo-0-1.png",
+    "sky sport 254": "https://logodownload.org/wp-content/uploads/2020/06/sky-sports-logo-0-1.png",
+    "sky sport 255": "https://logodownload.org/wp-content/uploads/2020/06/sky-sports-logo-0-1.png",
+    "sky sport 256": "https://logodownload.org/wp-content/uploads/2020/06/sky-sports-logo-0-1.png",
+    "sky sport 257": "https://logodownload.org/wp-content/uploads/2020/06/sky-sports-logo-0-1.png",
+    "sky cinema uno": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/italy/sky-cinema-uno-it.png",
+    "rai 2": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/italy/rai-2-it.png",
+    "rai 3": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/italy/rai-3-it.png",
+    "italia 1": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/italy/italia1-it.png",
+    "rete 4": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/italy/rete4-it.png",
+    "canale 5": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/italy/canale5-it.png",
+    "la7": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/italy/la7-it.png",
+    "tv8": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/italy/tv8-it.png",
+    "nove": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/italy/nove-it.png",
+    "sky sport uno": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/italy/sky-sport-uno-it.png",
+    "sky sport calcio": "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/italy/sky-sport-calcio-it.png",
+    # Aggiungere altri loghi necessari
+}
 
 def _clean_channel_name_vavoo(name):
     name = re.sub(r"\s*(\|E|\|H|\(6\)|\(7\)|\.c|\.s)\s*", "", name)
@@ -290,21 +344,31 @@ async def get_vavoo_streams(client, mfp_url=None, mfp_password=None):
 
     for ch_data in channels_list:
         if ch_data.get("country") == "Italy": # Filtro base
-            original_name = _clean_channel_name_vavoo(ch_data["name"])
+            raw_name_from_vavoo = ch_data["name"].strip()
+
+            # Applica la mappatura specifica di Vavoo se il nome grezzo (lowercase) è nel map
+            # Il nome per il display e per la logica interna sarà quello mappato (es. "Sky Sport 251")
+            # o quello originale se non c'è mappatura.
+            effective_channel_name = VAVOO_CHANNEL_NAME_MAP.get(raw_name_from_vavoo.lower(), raw_name_from_vavoo)
+
+            # Pulisci ulteriormente l'effective_channel_name e preparalo per il display
+            cleaned_effective_name = _clean_channel_name_vavoo(effective_channel_name)
+
             original_stream_url = f"{BASE_URL_VAVOO}/play/{ch_data['id']}/index.m3u8"
             
             final_url = original_stream_url
             if mfp_url and mfp_password:
                 final_url = f"{mfp_url}/proxy/hls/manifest.m3u8?api_password={mfp_password}&d={urllib.parse.quote(original_stream_url)}"
             final_url += HEADER_VAVOO_PARAMS
-            
-            channel_id_safe = original_name.lower().replace(' ', '-').replace('+', '')
-            logo_key = original_name.lower().split(' (v)')[0].strip() # Per cercare nel dizionario loghi
+
+            channel_id_safe = cleaned_effective_name.lower().replace(' ', '-').replace('+', '')
+            logo_key_for_dict = cleaned_effective_name.lower()
+
             streams.append({
                 'id': f"omgtv-vavoo-{channel_id_safe}",
-                'title': f"{original_name} (V)",
+                'title': f"{cleaned_effective_name} (V)",
                 'url': final_url,
-                'logo': CHANNEL_LOGOS_VAVOO.get(logo_key, "https://www.vavoo.tv/software/images/logo.png"), # Fallback logo Vavoo
+                'logo': CHANNEL_LOGOS_VAVOO.get(logo_key_for_dict, "https://www.vavoo.tv/software/images/logo.png"), # Fallback logo Vavoo
                 'group': "Vavoo"
             })
     return streams
