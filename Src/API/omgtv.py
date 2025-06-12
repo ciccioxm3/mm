@@ -225,28 +225,43 @@ async def get_static_channel_streams(client, mfp_url=None, mfp_password=None):
         # Salta i canali se mancano informazioni essenziali, specialmente l'URL
         # Modificato per non richiedere 'original_channel_logo'
         if not all([original_channel_id, original_channel_title, original_channel_url]):
-            print(f"DEBUG OMGTV (static): Canale statico saltato per dati mancanti (ID, Titolo o URL): {channel_data}")
+            # print(f"DEBUG OMGTV (static): Canale statico saltato per dati mancanti (ID, Titolo o URL): {channel_data}")
             continue
-        print(f"DEBUG OMGTV (static): Processando canale statico: {original_channel_title}")
+        # print(f"DEBUG OMGTV (static): Processando canale statico: {original_channel_title}")
 
         final_url = original_channel_url # Default to original URL
 
         if mfp_url and mfp_password:
-            print(f"DEBUG OMGTV (static): MFP abilitato per {original_channel_title}. URL originale: {original_channel_url}")
-            # Check if the original URL (without query for the check) is MPD
-            parsed_original_url = urllib.parse.urlparse(original_channel_url)
-            # Ottieni il percorso dell'URL e controlla se termina con .mpd
-            path_lower = parsed_original_url.path.lower()
+            # print(f"DEBUG OMGTV (static): MFP abilitato per {original_channel_title}. URL originale: {original_channel_url}")
+            is_mpd_processed_for_mfp = False
+            mpd_marker = ".mpd"
+            try:
+                # Cerca ".mpd" nell'URL originale
+                mpd_index = original_channel_url.lower().index(mpd_marker)
+                
+                # Estrai l'URL base fino a ".mpd" incluso
+                base_mpd_url = original_channel_url[:mpd_index + len(mpd_marker)]
+                
+                # Estrai la parte della query string che segue ".mpd"
+                query_string_part = ""
+                if len(original_channel_url) > mpd_index + len(mpd_marker):
+                    potential_query_part = original_channel_url[mpd_index + len(mpd_marker):]
+                    if potential_query_part.startswith("&"): # Assumiamo che i parametri inizino con &
+                        query_string_part = potential_query_part[1:] # Rimuovi il primo &
+                
+                if query_string_part: # Se ci sono parametri come key_id e key
+                    final_url = f"{mfp_url}/proxy/mpd/manifest.m3u8?api_password={mfp_password}&d={urllib.parse.quote(base_mpd_url)}&{query_string_part}"
+                else: # MPD senza parametri di chiave esterni
+                    final_url = f"{mfp_url}/proxy/mpd/manifest.m3u8?api_password={mfp_password}&d={urllib.parse.quote(base_mpd_url)}"
+                is_mpd_processed_for_mfp = True
+                # print(f"DEBUG OMGTV (static): {original_channel_title} è MPD. Applicando proxy MFP MPD. URL finale: {final_url}")
 
-            if path_lower.endswith('.mpd'):
-                print(f"DEBUG OMGTV (static): {original_channel_title} è MPD. Applicando proxy MFP MPD.")
-                # For MPD, use the MPD proxy endpoint. Pass the *full* original URL (with keys) to MFP.
-                final_url = f"{mfp_url}/proxy/mpd/manifest.m3u8?api_password={mfp_password}&d={urllib.parse.quote(original_channel_url)}"
-            else:
-                print(f"DEBUG OMGTV (static): {original_channel_title} non è MPD. Applicando proxy MFP HLS.")
-                # For other types (assumed HLS), use the HLS proxy endpoint
+            except ValueError: # ".mpd" non trovato nell'URL
+                pass # Verrà gestito come HLS sotto
+
+            if not is_mpd_processed_for_mfp: # Se non è stato processato come MPD (es. è HLS)
                 final_url = f"{mfp_url}/proxy/hls/manifest.m3u8?api_password={mfp_password}&d={urllib.parse.quote(original_channel_url)}"
-
+                # print(f"DEBUG OMGTV (static): {original_channel_title} non è MPD (o marker non trovato). Applicando proxy MFP HLS. URL finale: {final_url}")
 
         streams.append({
             'id': f"omgtv-static-{original_channel_id}",
@@ -257,7 +272,7 @@ async def get_static_channel_streams(client, mfp_url=None, mfp_password=None):
         # Aggiungi il logo solo se esiste
         if original_channel_logo:
             streams[-1]['logo'] = original_channel_logo
-        print(f"DEBUG OMGTV (static): Aggiunto stream: {streams[-1]}")
+        # print(f"DEBUG OMGTV (static): Aggiunto stream: {streams[-1]}")
     return streams
 
 async def get_omgtv_streams_for_channel_id(channel_id_full: str, client, mfp_url=None, mfp_password=None):
@@ -266,14 +281,14 @@ async def get_omgtv_streams_for_channel_id(channel_id_full: str, client, mfp_url
     Esempio channel_id_full: "omgtv-247ita-sky-sport-uno"
     """
     parts = channel_id_full.split('-')
-    print(f"DEBUG OMGTV: get_omgtv_streams_for_channel_id chiamato con: {channel_id_full}")
+    # print(f"DEBUG OMGTV: get_omgtv_streams_for_channel_id chiamato con: {channel_id_full}")
     if len(parts) < 3 or parts[0] != "omgtv":
         return [] # ID non valido
 
     source = parts[1] # es. "247ita"
     channel_name_query = " ".join(parts[2:]) # es. "sky sport uno"
 
-    print(f"DEBUG OMGTV: Source: {source}, Channel Name Query: {channel_name_query}")
+    # print(f"DEBUG OMGTV: Source: {source}, Channel Name Query: {channel_name_query}")
     if source == "247ita":
         # La funzione get_247ita_streams ora restituisce tutti i canali, quindi filtriamo qui.
         all_247ita_streams = await get_247ita_streams(client, mfp_url, mfp_password)
@@ -293,7 +308,7 @@ async def get_omgtv_streams_for_channel_id(channel_id_full: str, client, mfp_url
             # Estrai la parte del nome dall'ID dello stream: es. "sky-sport-251"
             stream_id_name_part = stream['id'].replace("omgtv-247ita-", "")
             if target_id_part_to_match == stream_id_name_part:
-                print(f"DEBUG OMGTV (247ita): Trovato stream corrispondente: {stream}")
+                # print(f"DEBUG OMGTV (247ita): Trovato stream corrispondente: {stream}")
                 return [stream] # Restituisce una lista con lo stream trovato
 
     elif source == "calcio":
@@ -306,27 +321,27 @@ async def get_omgtv_streams_for_channel_id(channel_id_full: str, client, mfp_url
             base_title_from_stream = stream['title'].split(' (CT')[0].lower()
             if channel_name_query == base_title_from_stream:
                 collected_calcio_streams.append(stream)
-        print(f"DEBUG OMGTV (calcio): Trovati {len(collected_calcio_streams)} streams per '{channel_name_query}'")
+        # print(f"DEBUG OMGTV (calcio): Trovati {len(collected_calcio_streams)} streams per '{channel_name_query}'")
         return collected_calcio_streams # Restituisce la lista di tutti gli stream calcio corrispondenti
 
     elif source == "vavoo":
         all_vavoo_streams = await get_vavoo_streams(client, mfp_url, mfp_password)
         for stream in all_vavoo_streams:
             if channel_name_query.replace("-", " ") in stream['id'].replace(f"omgtv-{source}-", "").replace("-", " "):
-                print(f"DEBUG OMGTV (vavoo): Trovato stream corrispondente: {stream}")
+                # print(f"DEBUG OMGTV (vavoo): Trovato stream corrispondente: {stream}")
                 return [stream]
 
     elif source == "static":
-        print(f"DEBUG OMGTV (static): Entrando nel blocco static.")
+        # print(f"DEBUG OMGTV (static): Entrando nel blocco static.")
         all_static_streams = await get_static_channel_streams(client, mfp_url, mfp_password)
         # channel_name_query è come "sky atlantic". Convertilo in "sky-atlantic" per il match.
         channel_name_query = channel_name_query.replace(" ", "-")
         target_static_id = f"omgtv-static-{channel_name_query}"
-        print(f"DEBUG OMGTV (static): Cerco target_static_id: {target_static_id}")
+        # print(f"DEBUG OMGTV (static): Cerco target_static_id: {target_static_id}")
         for stream in all_static_streams:
-            print(f"DEBUG OMGTV (static): Controllo stream con ID: {stream['id']}")
+            # print(f"DEBUG OMGTV (static): Controllo stream con ID: {stream['id']}")
             if stream['id'] == target_static_id:
-                print(f"DEBUG OMGTV (static): Trovato stream statico corrispondente: {stream}")
+                # print(f"DEBUG OMGTV (static): Trovato stream statico corrispondente: {stream}")
                 return [stream] # Restituisce una lista con lo stream trovato
     return []
 # --- Logica Calcio (CT) ---
