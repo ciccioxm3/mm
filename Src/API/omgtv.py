@@ -71,6 +71,8 @@ STATIC_CHANNELS_DATA = [
     }
 ]
 
+
+
 def get_247ita_channel_numeric_id(channel_name_query, html_content):
     """
     Cerca l'ID numerico di un canale specifico nell'HTML fornito.
@@ -217,32 +219,32 @@ async def get_static_channel_streams(client, mfp_url=None, mfp_password=None):
         original_channel_id = channel_data.get('id')
         original_channel_title = channel_data.get('title')
         original_channel_url = channel_data.get('url')
-        original_channel_logo = channel_data.get('logo') # Modificato da 'poster' a 'logo' per coerenza con STATIC_CHANNELS_DATA
+        original_channel_logo = channel_data.get('logo')
         group_name = channel_data.get('group', "Statici")
 
         # Salta i canali se mancano informazioni essenziali, specialmente l'URL
         if not all([original_channel_id, original_channel_title, original_channel_url, original_channel_logo]):
-            print(f"DEBUG: Canale statico saltato per dati mancanti: {channel_data}")
+            # print(f"DEBUG: Canale statico saltato per dati mancanti: {channel_data}")
             continue
 
-        # Logica per applicare il proxy MFP
+        final_url = original_channel_url # Default to original URL
+
         if mfp_url and mfp_password:
+            # Check if the original URL (without query for the check) is MPD
             parsed_original_url = urllib.parse.urlparse(original_channel_url)
-            original_query_params = urllib.parse.parse_qs(parsed_original_url.query)
-            original_base_url = parsed_original_url._replace(query=None).geturl() # URL senza parametri
+            base_check_url = parsed_original_url._replace(query=None).geturl()
 
-            if original_base_url.lower().endswith('.mpd'):
-                # Se è un URL MPD, usa l'endpoint MPD del proxy
-                final_url = f"{mfp_url}/proxy/mpd/manifest.m3u8?api_password={mfp_password}&d={urllib.parse.quote(original_base_url)}"
+            if base_check_url.lower().endswith('.mpd'):
+                # For MPD, use the MPD proxy endpoint. Pass the *full* original URL (with keys) to MFP.
+                final_url = f"{mfp_url}/proxy/mpd/manifest.m3u8?api_password={mfp_password}&d={urllib.parse.quote(original_channel_url)}"
+            else:
+                # For other types (assumed HLS), use the HLS proxy endpoint
+                final_url = f"{mfp_url}/proxy/hls/manifest.m3u8?api_password={mfp_password}&d={urllib.parse.quote(original_channel_url)}"
 
-        final_url = original_channel_url
-        if mfp_url and mfp_password:
-            # Applica il proxy MFP (assumendo che siano URL M3U8 diretti, quindi usa il proxy HLS)
-            final_url = f"{mfp_url}/proxy/hls/manifest.m3u8?api_password={mfp_password}&d={urllib.parse.quote(original_channel_url)}"
 
         streams.append({
             'id': f"omgtv-static-{original_channel_id}",
-            'title': f"{original_channel_title} (S)", # (S) per Statico
+            'title': f"{original_channel_title} (MPD)",
             'url': final_url,
             'logo': original_channel_logo,
             'group': group_name
@@ -308,7 +310,7 @@ async def get_omgtv_streams_for_channel_id(channel_id_full: str, client, mfp_url
             if stream['id'] == target_static_id:
                 return [stream] # Restituisce una lista con lo stream trovato
     return []
-# --- Logica Calcio ---
+# --- Logica Calcio (CT) ---
 BASE_URL_CALCIO = "https://calcionew.newkso.ru/calcio/"
 LOGO_URL_CALCIO = "https://i.postimg.cc/NFGs2Ptq/photo-2025-03-12-12-36-48.png"
 HEADER_CALCIO_PARAMS = "&h_user-agent=Mozilla%2F5.0+%28iPhone%3B+CPU+iPhone+OS+17_7+like+Mac+OS+X%29+AppleWebKit%2F605.1.15+%28KHTML%2C+like+Gecko%29+Version%2F18.0+Mobile%2F15E148+Safari%2F604.1&h_referer=https%3A%2F%2Fcalcionew.newkso.ru%2F&h_origin=https%3A%2F%2Fcalcionew.newkso.ru"
