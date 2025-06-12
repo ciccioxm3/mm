@@ -78,12 +78,25 @@ def get_247ita_channel_numeric_id(channel_name_query, html_content):
 
 DADDYLIVE_CHANNEL_NAME_MAP = {
     "sky calcio 1": "Sky Sport 251",
+    "skycalcio1": "Sky Sport 251",
+    "sky calcio1": "Sky Sport 251",
+    "sky sport calcio 1": "Sky Sport 251",
     "sky calcio 2": "Sky Sport 252",
+    "skycalcio2": "Sky Sport 252",
+    "sky calcio2": "Sky Sport 252",
+    "sky sport calcio 2": "Sky Sport 252",
     "sky calcio 3": "Sky Sport 253",
+    "skycalcio3": "Sky Sport 253",
+    "sky calcio3": "Sky Sport 253",
+    "sky sport calcio 3": "Sky Sport 253",
     "sky calcio 4": "Sky Sport 254",
+    "skycalcio4": "Sky Sport 254",
     "sky calcio 5": "Sky Sport 255",
+    "skycalcio5": "Sky Sport 255",
     "sky calcio 6": "Sky Sport 256",
+    "skycalcio6": "Sky Sport 256",
     "sky calcio 7": "Sky Sport 257",
+    "skycalcio7": "Sky Sport 257",
     # Aggiungere altre varianti se DaddyLive usa nomi come "sky sport calcio 1", ecc.
 }
 
@@ -116,10 +129,12 @@ async def get_247ita_streams(client, mfp_url=None, mfp_password=None):
     for link in links:
         if "Italy".lower() in link.text.lower(): # Filtra per canali italiani
             channel_name_original_from_link = link.text.strip() # Es. "Sky Calcio 1 Italy HD+"
+            # print(f"DEBUG: DaddyLive Original Name: {channel_name_original_from_link}") # LOG
 
             # Nome da usare per il lookup nella mappa DADDYLIVE_CHANNEL_NAME_MAP.
             # Rimuoviamo "Italy", "HD+" e convertiamo in lowercase per un matching più flessibile.
             name_for_map_lookup = channel_name_original_from_link.replace("Italy", "").replace("HD+", "").strip().lower()
+            # print(f"DEBUG: DaddyLive Name for Map Lookup: {name_for_map_lookup}") # LOG
 
             mapped_name = DADDYLIVE_CHANNEL_NAME_MAP.get(name_for_map_lookup)
 
@@ -281,9 +296,9 @@ def _format_channel_name_calcio(raw_name):
      "comedycentral": "Comedy Central", "dazn1": "DAZN 1",
         "eurosport1": "Eurosport 1", "eurosport2": "Eurosport 2", "formula": "Formula 1",
         "formula1": "Formula 1", "history": "History", "juve": "Juventus", "laliga": "LaLiga",
-        "ligue1": "Ligue 1", "pisa": "Pisa", "porto": "Porto", "portugal": "Portugal",
-        "serie": "Serie A", # Typo fixed: Suspense
-        "serie1": "Serie A 1", "seriesi": "Sky Serie", "sky258": "Sky 258", "sky259": "Sky 259",
+        "ligue1": "Ligue 1", "pisa": "Pisa", "porto": "Porto", "portugal": "Portugal", "saler": "Salernitana",
+        "samp": "Sampdoria", "sass": "Sassuolo", "serie": "Serie A", "serie1": "Serie A 1",
+        "seriesi": "Sky Serie", "sky258": "Sky 258", "sky259": "Sky 259",
         "skyarte": "Sky Arte", "skyatlantic": "Sky Atlantic", "skycinemacollection": "Sky Cinema Collection",
         "skycinemacomedy": "Sky Cinema Comedy", "skycinemadrama": "Sky Cinema Drama",
         "skycinemadue": "Sky Cinema Due", "skycinemafamily": "Sky Cinema Family",
@@ -295,8 +310,8 @@ def _format_channel_name_calcio(raw_name):
         "skysport256": "Sky Sport 256", "skysport257": "Sky Sport 257", "skysportarena": "Sky Sport Arena",
         "skysportcalcio": "Sky Sport Calcio", "skysportgolf": "Sky Sport Golf", "skysportmax": "Sky Sport Max",
         "skysportmotogp": "Sky Sport MotoGP", "skysportnba": "Sky Sport NBA", "skysporttennis": "Sky Sport Tennis",
-        "skysportuno": "Sky Sport Uno", "skyuno": "Sky Uno", "solocalcio": "Solo Calcio",
-        "sportitalia": "Sportitalia", "zona": "Zona DAZN"
+        "skysportuno": "Sky Sport Uno", "skyuno": "Sky Uno", "solocalcio": "Solo Calcio", "sportitalia": "Sportitalia",
+        "zona": "Zona DAZN", "zonab": "Zona B"
     }
     channel_display_name = name_map.get(processed_name_part.lower(), processed_name_part.capitalize())
     return channel_display_name, server_label
