@@ -129,12 +129,17 @@ async def get_247ita_streams(client, mfp_url=None, mfp_password=None):
     for link in links:
         if "Italy".lower() in link.text.lower(): # Filtra per canali italiani
             channel_name_original_from_link = link.text.strip() # Es. "Sky Calcio 1 Italy HD+"
-            print(f"DEBUG: DaddyLive Original Name: {channel_name_original_from_link}") # LOG
+            # print(f"DEBUG: DaddyLive Original Name: {channel_name_original_from_link}") # LOG
 
             # Nome da usare per il lookup nella mappa DADDYLIVE_CHANNEL_NAME_MAP.
-            # Rimuoviamo "Italy", "HD+" e convertiamo in lowercase per un matching più flessibile.
-            name_for_map_lookup = channel_name_original_from_link.replace("Italy", "").replace("HD+", "").strip().lower()
-            print(f"DEBUG: DaddyLive Name for Map Lookup: {name_for_map_lookup}") # LOG
+            # Rimuoviamo "Italy", "HD+", numeri tra parentesi e convertiamo in lowercase per un matching più flessibile.
+            name_for_map_lookup = channel_name_original_from_link.replace("Italy", "") \
+                                                                .replace("HD+", "") \
+                                                                .replace("(251)", "").replace("(252)", "").replace("(253)", "") \
+                                                                .replace("(254)", "").replace("(255)", "").replace("(256)", "") \
+                                                                .replace("(257)", "") \
+                                                                .strip().lower()
+            # print(f"DEBUG: DaddyLive Name for Map Lookup: {name_for_map_lookup}") # LOG
 
             mapped_name = DADDYLIVE_CHANNEL_NAME_MAP.get(name_for_map_lookup)
 
@@ -221,15 +226,16 @@ async def get_omgtv_streams_for_channel_id(channel_id_full: str, client, mfp_url
 
     elif source == "calcio":
         all_calcio_streams = await get_calcio_streams(client, mfp_url, mfp_password)
+        collected_calcio_streams = []
+        # channel_name_query è es. "sky nature" (dall'ID "omgtv-calcio-sky-nature")
         for stream in all_calcio_streams:
-            # Confronto primario: l'ID completo richiesto deve corrispondere all'ID dello stream generato.
-            if stream['id'] == channel_id_full:
-                return [stream]
-            # Fallback (meno ideale, potrebbe portare a falsi positivi se i nomi sono simili ma gli ID sorgente diversi):
-            # Controlla se la parte del nome del canale dell'ID richiesto è contenuta nella parte finale dell'ID dello stream.
-            elif channel_name_query.replace("-", " ") in stream['id'].replace(f"omgtv-{source}-", "").replace("-", " "):
-                print(f"DEBUG: Calcio stream trovato con matching parziale: req='{channel_name_query}' vs stream_id_part='{stream['id'].replace(f'omgtv-{source}-', '')}'") # LOG
-                return [stream] 
+            # stream['title'] è es. "Sky Nature (CT1)"
+            # Estrai il nome base del canale dal titolo dello stream generato per il confronto
+            base_title_from_stream = stream['title'].split(' (CT')[0].lower()
+            if channel_name_query == base_title_from_stream:
+                collected_calcio_streams.append(stream)
+        return collected_calcio_streams # Restituisce la lista di tutti gli stream calcio corrispondenti
+
     elif source == "vavoo":
         all_vavoo_streams = await get_vavoo_streams(client, mfp_url, mfp_password)
         for stream in all_vavoo_streams:
@@ -331,15 +337,15 @@ def _format_channel_name_calcio(raw_name):
     return channel_display_name, server_label
 
 async def get_calcio_streams(client, mfp_url=None, mfp_password=None):
-    print("DEBUG: Entrando in get_calcio_streams") # LOG
+    # print("DEBUG: Entrando in get_calcio_streams") # LOG
     streams = []
     raw_channel_list = CHANNELS_RAW_CALCIO + [item[1].split('/mono.m3u8')[0] + '/' for item in EXTRA_CHANNELS_CALCIO]
 
     if not raw_channel_list:
-        print("DEBUG: raw_channel_list è vuota in get_calcio_streams") # LOG
+        # print("DEBUG: raw_channel_list è vuota in get_calcio_streams") # LOG
         return []
 
-    print(f"DEBUG: raw_channel_list ha {len(raw_channel_list)} elementi.") # LOG
+    # print(f"DEBUG: raw_channel_list ha {len(raw_channel_list)} elementi.") # LOG
 
     for raw_path_part in raw_channel_list:
         try:
@@ -361,12 +367,12 @@ async def get_calcio_streams(client, mfp_url=None, mfp_password=None):
                 'group': "Calcio"
             }
             streams.append(stream_data)
-            print(f"DEBUG: Aggiunto stream calcio: {stream_data['id']} - {stream_data['title']}") # LOG
+            # print(f"DEBUG: Aggiunto stream calcio: {stream_data['id']} - {stream_data['title']}") # LOG
         except Exception as e:
-            print(f"DEBUG: Errore durante il processamento di {raw_path_part} in get_calcio_streams: {e}") # LOG
+            # print(f"DEBUG: Errore durante il processamento di {raw_path_part} in get_calcio_streams: {e}") # LOG
             continue # Continua con il prossimo canale
             
-    print(f"DEBUG: Uscendo da get_calcio_streams, {len(streams)} streams generati.") # LOG
+    # print(f"DEBUG: Uscendo da get_calcio_streams, {len(streams)} streams generati.") # LOG
     return streams
 
 
