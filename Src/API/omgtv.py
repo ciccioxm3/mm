@@ -235,9 +235,10 @@ async def get_static_channel_streams(client, mfp_url=None, mfp_password=None):
             print(f"DEBUG OMGTV (static): MFP abilitato per {original_channel_title}. URL originale: {original_channel_url}")
             # Check if the original URL (without query for the check) is MPD
             parsed_original_url = urllib.parse.urlparse(original_channel_url)
-            base_check_url = parsed_original_url._replace(query=None).geturl()
+            # Ottieni il percorso dell'URL e controlla se termina con .mpd
+            path_lower = parsed_original_url.path.lower()
 
-            if base_check_url.lower().endswith('.mpd'):
+            if path_lower.endswith('.mpd'):
                 print(f"DEBUG OMGTV (static): {original_channel_title} è MPD. Applicando proxy MFP MPD.")
                 # For MPD, use the MPD proxy endpoint. Pass the *full* original URL (with keys) to MFP.
                 final_url = f"{mfp_url}/proxy/mpd/manifest.m3u8?api_password={mfp_password}&d={urllib.parse.quote(original_channel_url)}"
@@ -318,7 +319,8 @@ async def get_omgtv_streams_for_channel_id(channel_id_full: str, client, mfp_url
     elif source == "static":
         print(f"DEBUG OMGTV (static): Entrando nel blocco static.")
         all_static_streams = await get_static_channel_streams(client, mfp_url, mfp_password)
-        # channel_name_query è la parte dell'ID dopo "omgtv-static-", es. "rai-1"
+        # channel_name_query è come "sky atlantic". Convertilo in "sky-atlantic" per il match.
+        channel_name_query = channel_name_query.replace(" ", "-")
         target_static_id = f"omgtv-static-{channel_name_query}"
         print(f"DEBUG OMGTV (static): Cerco target_static_id: {target_static_id}")
         for stream in all_static_streams:
