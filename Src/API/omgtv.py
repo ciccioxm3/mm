@@ -201,10 +201,24 @@ async def get_omgtv_streams_for_channel_id(channel_id_full: str, client, mfp_url
     if source == "247ita":
         # La funzione get_247ita_streams ora restituisce tutti i canali, quindi filtriamo qui.
         all_247ita_streams = await get_247ita_streams(client, mfp_url, mfp_password)
+
+        # channel_name_query è il nome richiesto, es. "sky calcio 1" o "sky sport 251"
+        query_normalized_for_map_lookup = channel_name_query.lower() # es. "sky calcio 1"
+        
+        # Controlla se il nome richiesto è una chiave nella mappa di DaddyLive.
+        # Se sì, usa il nome mappato per il confronto. Altrimenti, usa il nome originale.
+        # es. se query_normalized_for_map_lookup è "sky calcio 1", target_channel_name_for_id_match diventa "sky sport 251"
+        # es. se query_normalized_for_map_lookup è "sky sport 251", target_channel_name_for_id_match rimane "sky sport 251"
+        target_channel_name_for_id_match = DADDYLIVE_CHANNEL_NAME_MAP.get(query_normalized_for_map_lookup, channel_name_query).lower()
+        target_id_part_to_match = target_channel_name_for_id_match.replace(" ", "-")
+
         for stream in all_247ita_streams:
-            # Confronto più robusto dell'ID o del titolo
-            if channel_name_query.replace("-", " ") in stream['id'].replace("omgtv-247ita-", "").replace("-", " "):
+            # stream['id'] è es. "omgtv-247ita-sky-sport-251"
+            # Estrai la parte del nome dall'ID dello stream: es. "sky-sport-251"
+            stream_id_name_part = stream['id'].replace("omgtv-247ita-", "")
+            if target_id_part_to_match == stream_id_name_part:
                 return [stream] # Restituisce una lista con lo stream trovato
+
     elif source == "calcio":
         all_calcio_streams = await get_calcio_streams(client, mfp_url, mfp_password)
         for stream in all_calcio_streams:
